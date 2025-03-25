@@ -1,0 +1,80 @@
+<html>
+<head>
+     <title>Expense Counter</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <style>
+        .form {
+            background-color:  #ffb347;
+            border-radius: 20px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body class="container mt-5">
+    <h2 class="text-center">Expense Counter</h2>
+    <div>
+        <form class="form p-4 m-3">
+            <label for="category">Select Category</label>
+            <select id="category" class="form-control mb-3">
+                <option value="" disabled selected>---Select---</option>
+                <option value="Food">Food</option>
+                <option value="Transport">Transport</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Others">Others</option>
+            </select>
+            <label>Enter amount:</label><br>
+            <input type="number" id="amount" name="amount" class="form-control mb-3">
+            <center><button type="button" onclick="expense()" class="btn btn-primary mb-3 w-75">Add Expense</button></center>
+            <center><h2>Total Expenses: ₹<span id="total">0</span></h2></center>
+            <ul id="expenseList" class="list-group mt-3"></ul>
+        </form>
+    </div>
+
+    <script>
+        let total_expense = 0;
+
+        function add_item(category, amount) {
+            const expenseList = document.getElementById("expenseList");
+            expenseList.innerHTML +=
+                `<li class='list-group-item d-flex justify-content-between'>
+                    <span>${category}: ₹${amount}</span>
+                    <button class='btn btn-danger btn-sm' onclick='removeExpense(this, ${amount})'>X</button>
+                </li>`;
+        }
+
+        function expense() {
+            const category = document.getElementById("category").value;
+            const amount = document.getElementById("amount").value;
+
+            if (category === "") {
+                alert("Please select a category!");
+                return;
+            }
+
+            if (amount === "" || amount <= 0) {
+                alert("Enter a valid amount!");
+                return;
+            }
+
+            total_expense += parseFloat(amount);
+            document.getElementById("total").innerText = total_expense;
+            add_item(category, amount);
+
+            document.getElementById("amount").value = "";
+            document.getElementById("category").selectedIndex = 0;
+        }
+
+        function removeExpense(button, amount) {
+            total_expense -= parseFloat(amount);
+            document.getElementById("total").innerText = total_expense;
+            button.parentElement.remove();
+        }
+    </script>
+</body>
+</html>
